@@ -221,12 +221,17 @@
       ar
       ar-modes="webxr scene-viewer quick-look"
       ar-scale="auto"
+      ar-placement="floor"
+      xr-environment
+      touch-action="pan-y"
       loading="eager"
-    ></model-viewer>
+    >
+      <div slot="ar-button" style="display:none"></div>
+    </model-viewer>
 
     <div class="info-card">
       <h2>3D Model Viewer</h2>
-      <p>Drag to rotate &nbsp;·&nbsp; Pinch to zoom &nbsp;·&nbsp; Tap AR to place in your space</p>
+      <p>Drag to rotate &nbsp;·&nbsp; Pinch to zoom &nbsp;·&nbsp; In AR: 1 finger = move · 2 fingers = rotate &amp; scale</p>
       <div class="tags">
         <span class="tag">4D AR</span>
         <span class="tag">WebXR</span>
