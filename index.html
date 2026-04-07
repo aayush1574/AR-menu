@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>4D AR Viewer</title>
+  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #0a0a0a;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    header {
+      width: 100%;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #111;
+      border-bottom: 1px solid #222;
+    }
+
+    header .logo {
+      font-size: 1.3rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: #00e5ff;
+    }
+
+    header .badge {
+      background: #00e5ff22;
+      color: #00e5ff;
+      border: 1px solid #00e5ff55;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      letter-spacing: 1px;
+    }
+
+    .viewer-wrap {
+      width: 100%;
+      max-width: 520px;
+      margin: 28px auto 0;
+      padding: 0 16px;
+    }
+
+    model-viewer {
+      width: 100%;
+      height: 420px;
+      background: radial-gradient(ellipse at center, #1a1a2e 0%, #0a0a0a 100%);
+      border-radius: 20px;
+      border: 1px solid #222;
+      --poster-color: transparent;
+    }
+
+    model-viewer::part(default-ar-button) {
+      display: none;
+    }
+
+    .info-card {
+      background: #111;
+      border: 1px solid #222;
+      border-radius: 16px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+
+    .info-card h2 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .info-card p {
+      color: #888;
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    .tags {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+
+    .tag {
+      background: #1a1a1a;
+      border: 1px solid #333;
+      color: #aaa;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 14px;
+      border-radius: 12px;
+      border: none;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .btn:active { opacity: 0.8; }
+
+    .btn-ar {
+      background: linear-gradient(135deg, #00e5ff, #0072ff);
+      color: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-ar svg { width: 20px; height: 20px; }
+
+    .btn-3d {
+      background: #1a1a1a;
+      color: #fff;
+      border: 1px solid #333;
+    }
+
+    .hint {
+      text-align: center;
+      color: #444;
+      font-size: 0.78rem;
+      margin-bottom: 32px;
+    }
+
+    .qr-section {
+      background: #111;
+      border: 1px solid #222;
+      border-radius: 16px;
+      padding: 20px;
+      margin: 0 0 20px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .qr-section #qrcode canvas,
+    .qr-section #qrcode img {
+      border-radius: 8px;
+      display: block;
+    }
+
+    .qr-info { flex: 1; }
+
+    .qr-info h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .qr-info p {
+      color: #666;
+      font-size: 0.8rem;
+      line-height: 1.5;
+    }
+
+    .qr-url {
+      margin-top: 8px;
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 8px;
+      padding: 6px 10px;
+      font-size: 0.72rem;
+      color: #00e5ff;
+      word-break: break-all;
+      font-family: monospace;
+    }
+
+    .ar-not-supported {
+      display: none;
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 12px 16px;
+      color: #888;
+      font-size: 0.82rem;
+      text-align: center;
+      margin-top: -8px;
+      margin-bottom: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <span class="logo">4D AR</span>
+    <span class="badge">BETA</span>
+  </header>
+
+  <div class="viewer-wrap">
+
+    <model-viewer
+      id="mv"
+      src="picture1.glb"
+      alt="3D Model"
+      shadow-intensity="1"
+      camera-controls
+      auto-rotate
+      ar
+      ar-modes="webxr scene-viewer quick-look"
+      ar-scale="auto"
+      loading="eager"
+    ></model-viewer>
+
+    <div class="info-card">
+      <h2>3D Model Viewer</h2>
+      <p>Drag to rotate &nbsp;·&nbsp; Pinch to zoom &nbsp;·&nbsp; Tap AR to place in your space</p>
+      <div class="tags">
+        <span class="tag">4D AR</span>
+        <span class="tag">WebXR</span>
+        <span class="tag">GLB</span>
+        <span class="tag">Interactive</span>
+      </div>
+    </div>
+
+    <div class="ar-not-supported" id="arMsg">
+      AR is not supported on this device/browser. Use Chrome on Android or Safari on iOS.
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-ar" id="arBtn" onclick="launchAR()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+          <path d="M2 17l10 5 10-5"/>
+          <path d="M2 12l10 5 10-5"/>
+        </svg>
+        View in AR
+      </button>
+      <button class="btn btn-3d" onclick="reset3D()">Reset View</button>
+    </div>
+
+    <p class="hint">Best experienced on mobile with AR support</p>
+
+    <div class="qr-section" id="qrSection">
+      <div id="qrcode"></div>
+      <div class="qr-info">
+        <h3>📱 Scan to open on mobile</h3>
+        <p>Connect your phone to the same Wi-Fi, then scan to view &amp; test AR.</p>
+        <div class="qr-url" id="qrUrl"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const mv = document.getElementById('mv');
+
+    mv.addEventListener('load', () => {
+      if (!mv.canActivateAR) {
+        document.getElementById('arMsg').style.display = 'block';
+        document.getElementById('arBtn').style.opacity = '0.4';
+        document.getElementById('arBtn').style.pointerEvents = 'none';
+      }
+    });
+
+    function launchAR() {
+      mv.activateAR();
+    }
+
+    (function () {
+      const url = location.protocol + '//' + location.host + '/';
+      document.getElementById('qrUrl').textContent = url;
+      new QRCode(document.getElementById('qrcode'), {
+        text: url,
+        width: 110,
+        height: 110,
+        colorDark: '#00e5ff',
+        colorLight: '#111111',
+        correctLevel: QRCode.CorrectLevel.M
+      });
+    })();
+
+    function reset3D() {
+      mv.cameraOrbit = 'auto auto auto';
+      mv.resetTurntableRotation();
+      mv.jumpCameraToGoal();
+    }
+  </script>
+
+</body>
+</html>
